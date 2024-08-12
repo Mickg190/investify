@@ -1,0 +1,135 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deposit</title>
+  <style>
+ 
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+.header {
+  background-color: #f0f0f0;
+  border-bottom: 1px solid #ddd;
+  width: 95%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+}
+
+.page-name {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.logout-btn {
+  font-size: 12px;
+  color: #666;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.deposit-container {
+  margin-top: 100px;
+  text-align: center;
+  width: 100%;
+}
+
+.enter-amount {
+  margin-bottom: 20px;
+  font-weight: bold; /* Added bold font weight */
+}
+
+.bank-details {
+  margin-top: 20px;
+}
+
+input[type="number"] {
+  padding: 10px;
+			margin-bottom: 20px;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			width: 90%;
+			text-align: center;
+		}
+
+button {
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin: 10px 0;
+}
+
+button:hover {
+  background-color: #3e8e41;
+}
+
+  </style>
+</head>
+<body>
+  <div class="header">
+    <img src="logo.png" alt="Logo" class="logo">
+    <p class="page-name">DEPOSIT</p>
+    <button class="logout-btn" id="logout-btn">Back</button>
+  </div>
+  <div class="deposit-container">
+    <div class="enter-amount">
+      <label for="amount">Enter Amount:</label>
+      <input type="number" id="amount" name="amount">
+      <button id="next-btn">Next</button>
+    </div>
+    <div class="bank-details" style="display: none;">
+      <h2>Bank Details:</h2>
+      <p>Account Number: XXXXXXXX</p>
+      <p>Account Name: XXXXXXXX</p>
+      <p>Bank Name: XXXXXXXX</p>
+      <p>IFSC Code: XXXXXXXX</p>
+      <p>Make sure to transfer the amount before clicking Done.</p>
+      <button id="done-btn">Done</button>
+    </div>
+  </div>
+  <script>
+    document.getElementById('next-btn').addEventListener('click', () => {
+      const amount = document.getElementById('amount').value;
+      if (amount > 0) {
+        document.querySelector('.enter-amount').style.display = 'none';
+        document.querySelector('.bank-details').style.display = 'block';
+      } else {
+        alert('Please enter a valid amount.');
+      }
+    });
+    document.getElementById('done-btn').addEventListener('click', () => {
+      const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+      loggedInUser.balance += parseInt(document.getElementById('amount').value);
+      localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
+      window.location.href = 'dashboard.html';
+    });
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      localStorage.removeItem('loggedInUser');
+      window.location.href = 'dashboard.html';
+    });
+  </script>
+</body>
+</html>

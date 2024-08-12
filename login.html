@@ -1,0 +1,162 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Login/Sign Up</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f0f0f0;
+		}
+		
+		.container {
+			max-width:  300px;
+			margin: 40px auto;
+			padding: 40px;
+			background-color: #fff;
+			border: 1px solid #ddd;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+			border-radius: 10px;
+		}
+		
+		.logo {
+			text-align: center;
+			margin-bottom: 20px;
+		}
+		
+		.logo img {
+			width: 100px;
+			height: 100px;
+			border-radius: 50%;
+		}
+		
+		form {
+			display: flex;
+			flex-direction: column;
+		}
+		
+		label {
+			margin-bottom: 10px;
+			font-weight: bold;
+			color: #333;
+		}
+		
+		input {
+			padding: 10px;
+			margin-bottom: 20px;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			width: 90%;
+			text-align: center;
+		}
+		
+		button {
+			background-color: #4CAF50;
+			color: #fff;
+			border: none;
+			padding: 10px 20px;
+			font-size: 16px;
+			cursor: pointer;
+			border-radius: 5px;
+			width: 100%;
+			text-align: center;
+		}
+		
+		.toggle-btn {
+			margin-top: 20px;
+			color: #666;
+			cursor: pointer;
+		}
+		
+		.toggle-btn:hover {
+			color: #333;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="logo">
+			<img src="logo.png" alt="Logo">
+		</div>
+		<form id="login-form">
+			<h2>Login</h2>
+			<label for="email">Email</label>
+			<input type="email" id="email" name="email">
+			<label for="password">Password</label>
+			<input type="password" id="password" name="password">
+			<button>Login</button>
+			<div class="toggle-btn" id="signup-toggle">Don't have an account? Sign Up</div>
+		</form>
+		
+		<form id="signup-form" style="display: none;">
+			<h2>Sign Up</h2>
+			<label for="name">Name</label>
+			<input type="text" id="name" name="name">
+			<label for="email">Email</label>
+			<input type="email" id="email" name="email">
+			<label for="password">Password</label>
+			<input type="password" id="password" name="password">
+			<button>Sign Up</button>
+			<div class="toggle-btn" id="login-toggle">Already have an account? Login</div>
+		</form>
+		
+		<script>
+const users = JSON.parse(localStorage.getItem('users')) || [];
+
+// Login form submission
+document.getElementById('login-form').addEventListener('submit', (e) => {
+	e.preventDefault();
+	const email = document.getElementById('email').value;
+	const password = document.getElementById('password').value;
+
+	if (email === '' || password === '') {
+		alert('Please fill in all fields');
+		return;
+	}
+
+	const user = users.find((user) => user.email === email && user.password === password);
+
+	if (user) {
+		localStorage.setItem('loggedInUser', JSON.stringify(user));
+		window.location.href = 'dashboard.html';
+	} else {
+		alert('Invalid email or password');
+	}
+});
+
+// Signup form submission
+document.getElementById('signup-form').addEventListener('submit', (e) => {
+	e.preventDefault();
+	const name = document.getElementById('name').value;
+	const email = document.getElementById('email').value;
+	const password = document.getElementById('password').value;
+
+	users.push({ name, email, password, balance: 0 });
+	localStorage.setItem('users', JSON.stringify(users));
+	alert('Sign up successful!');
+});
+
+// Toggle forms
+document.getElementById('signup-toggle').addEventListener('click', () => {
+	document.getElementById('login-form').style.display = 'none';
+	document.getElementById('signup-form').style.display = 'block';
+});
+
+document.getElementById('login-toggle').addEventListener('click', () => {
+	document.getElementById('signup-form').style.display = 'none';
+	document.getElementById('login-form').style.display = 'block';
+});
+
+// Dashboard page
+if (window.location.href.includes('dashboard.html')) {
+	const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+
+	document.getElementById('username').innerText = loggedInUser.name;
+	document.getElementById('balance').innerText = `Balance: $${loggedInUser.balance}`;
+}
+		</script>
+	</div>
+</body>
+</html>

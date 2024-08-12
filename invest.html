@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Invest</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			text-align: center;
+		}
+		
+		.header {
+			background-color: #f0f0f0;
+			border-bottom: 1px solid #ddd;
+			width: 95%;
+			position: fixed;
+			top: 0;
+			left: 0;
+			z-index: 1;
+			padding: 10px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+		
+		.logo {
+			width: 50px;
+			height: 50px;
+			margin-right: 10px;
+		}
+		
+		.page-name {
+			font-size: 24px;
+			font-weight: bold;
+			margin: 0;
+		}
+		
+		.logout-btn {
+			font-size: 12px;
+			color: #666;
+			cursor: pointer;
+			background: none;
+			border: none;
+			padding: 0;
+		}
+		
+		.welcome-message {
+			margin-top: 100px;
+			font-size: 24px;
+			font-weight: bold;
+		}
+		
+		.motivational-speech {
+			margin-top: 20px;
+		}
+		
+		.invest-container {
+			margin-top: 20px;
+		}
+		
+		#invest-form {
+			display: none;
+		}
+		
+		label {
+			margin-bottom: 10px;
+		}
+		
+		input[type="number"] {
+		padding: 10px;
+			margin-bottom: 20px;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			width: 90%;
+			text-align: center;
+		}
+		
+		button {
+			background-color: #4CAF50;
+			color: #fff;
+			border: none;
+			padding: 10px 20px;
+			font-size: 16px;
+			cursor: pointer;
+			border-radius: 5px;
+			margin: 10px;
+			border: 2px solid #4CAF50;
+			transition: background-color 0.3s ease;
+		}
+		
+		button:hover {
+			background-color: #3e8e41;
+		}
+	</style>
+</head>
+<body>
+	<div class="header">
+		<img src="logo.png" alt="Logo" class="logo">
+		<p class="page-name">INVEST</p>
+		<button class="logout-btn" id="logout-btn">Back</button>
+	</div>
+	<div class="welcome-message">
+		Welcome<span id="username"></span>
+	</div>
+	<div class="motivational-speech">
+		<h2>Investing is a journey, not a destination.</h2>
+		<p>Start building your wealth today!</p>
+	</div>
+	<div class="invest-container">
+		<button id="invest-btn">Invest</button>
+		<div id="invest-form">
+			<label for="amount">Enter Amount:</label>
+			<input type="number" id="amount" name="amount">
+			<button id="submit-invest-btn">Submit</button>
+		</div>
+	</div>
+	<script>
+		document.getElementById('invest-btn').addEventListener('click', () => {
+			document.getElementById('invest-form').style.display = 'block';
+			document.getElementById('invest-btn').style.display = 'none';
+		});
+	document.getElementById('logout-btn').addEventListener('click', () => {
+  localStorage.removeItem('loggedInUser');
+  window.location.href = 'dashboard.html'; // Redirect to login page
+});	
+		document.getElementById('submit-invest-btn').addEventListener('click', () => {
+			const amount = document.getElementById('amount').value;
+			const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+			if (loggedInUser.balance >= parseInt(amount)) {
+				loggedInUser.balance -= parseInt(amount);
+				localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
+				loggedInUser.investmentDate = new Date().getTime() + (30 * 24 * 60 * 60 * 1000);
+				localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
+				window.location.href = 'dashboard.html';
+			} else {
+				alert('Insufficient balance. Please enter an amount less than or equal to your current balance.');
+			}
+		});
+	</script>
+</body>
+</html>
